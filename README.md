@@ -3,11 +3,15 @@ NodeJS project to authenticate users by token, using jwt, Mongoose, crypto, Expr
 
 # Endpoints
 
-**/auth/sing-up ** => Public, endpoint to register one user
-**/auth/sing-in** => Public, endpoint to login into the APP
-**/users/me** => Private, to get info by current user, you need a token
-**/upload ** => Public to upload files on test mode
-**/** => Public endpoint to test API
+**/auth/sing-up** => Public, endpoint to register one user
+
+/auth/sing-in => Public, endpoint to login into the APP
+
+/users/me => Private, to get info by current user, you need a token
+
+/upload => Public to upload files on test mode
+
+/ => Public endpoint to test API
 
 # How to test private endpoint
 
