@@ -3,9 +3,9 @@ NodeJS project to authenticate users by token, using jwt, Mongoose, crypto, Expr
 
 # Endpoints
 
-**/auth/sing-up** => Public, endpoint to register one user
+**/auth/sign-up** => Public, endpoint to register one user
 
-**/auth/sing-in** => Public, endpoint to login into the APP
+**/auth/sign-in** => Public, endpoint to login into the APP
 
 **/users/me** => Private, to get info by current user, you need a token
 

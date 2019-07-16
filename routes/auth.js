@@ -19,7 +19,7 @@ function check_required_fileds(body) {
     return true;
 }
 
-router.post('/sing-up', function(req, res, next) {
+router.post('/sign-up', function(req, res, next) {
 	var user = new User({
         name: req.body.name,
     	email: req.body.email.toLowerCase()
@@ -39,7 +39,7 @@ router.post('/sing-up', function(req, res, next) {
     });
 });
 
-router.post('/sing-in', function(req, res) {
+router.post('/sign-in', function(req, res) {
     if (!check_required_fileds(req.body))
         return res
                 .status(400)
