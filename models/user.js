@@ -7,7 +7,8 @@ let UserSchema = new Schema({
     name: {type: String, required: true, max: 100},
     email: {type: String, required: true, max: 150},
     hash : String, 
-    salt : String
+    salt : String,
+    is_admin: {type: Boolean, default: false}
 });
 
 // method to set salt and hash the password for a user 

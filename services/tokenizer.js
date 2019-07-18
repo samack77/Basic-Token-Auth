@@ -2,6 +2,8 @@
 var jwt = require('jwt-simple');
 var moment = require('moment');
 var env = require('../config/env');
+var mongoose = require('mongoose');
+var User = mongoose.model('User');
 
 exports.createToken = function(user) {
   var payload = {
@@ -35,7 +37,18 @@ exports.ensureAuthenticated = function(req, res, next) {
      	.status(401)
         .send({message: "Token has expired"});
   }
+
+  User.findOne({_id: mongoose.Types.ObjectId(payload.sub)}, function (err, user) {
+    if (err || !user) {
+      return res
+       .status(401)
+        .send({message: "User not found"});
+    }
+
+    req.user = payload.sub;
+    req.is_admin = !!user.is_admin;
+    next();
+  })
   
-  req.user = payload.sub;
-  next();
+  
 }
