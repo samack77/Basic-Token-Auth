@@ -95,7 +95,7 @@ router.get('/', authMiddleware.ensureAuthenticated, function(req, res, next) {
 				.send({message: "Oops, Something is wrong!"});
 		else{
 			const users_res = users.map(function (user, index){
-				return {email: user.email, name: user.name, is_admin: user.is_admin}
+				return {id: user._id, email: user.email, name: user.name, is_admin: user.is_admin}
 			});
 
 			return res
