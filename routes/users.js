@@ -2,6 +2,7 @@ var express = require('express');
 var mongoose = require('mongoose');
 var crypto = require('crypto'); 
 var tokenizer = require('../services/tokenizer');
+var authMiddleware = require('../middlewares/auth')
 
 var User = mongoose.model('User');
 var router = express.Router();
@@ -12,7 +13,7 @@ function get_user_by_id(user_id, cb){
 	})
 }
 
-router.post('/:user_id', tokenizer.ensureAuthenticated, function(req, res, next) {
+router.post('/:user_id', authMiddleware.ensureAuthenticated, function(req, res, next) {
 	var user_id = req.params.user_id;
 	if (user_id == "me")
 		user_id = req.user;
@@ -33,12 +34,9 @@ router.post('/:user_id', tokenizer.ensureAuthenticated, function(req, res, next)
     console.log("is_admin param: ", req.body.is_admin, typeof req.body.is_admin);
 
     if (req.body.password){
-		new_data.salt = crypto.randomBytes(16).toString('hex'); 
-  
-	    // hashing user's salt and password with 1000 iterations, 
-	    // 64 length and sha512 digest 
-	    new_data.hash = crypto.pbkdf2Sync(password, this.salt,  
-	    1000, 64, `sha512`).toString(`hex`); 
+    	const saltAndHash = tokenizer.generateSaltAndHash(password);
+		new_data.salt = saltAndHash.salt;
+	    new_data.hash = saltAndHash.hash;
 	}
 
 	User.updateOne({_id: mongoose.Types.ObjectId(user_id)}, new_data, function(err){
@@ -54,7 +52,7 @@ router.post('/:user_id', tokenizer.ensureAuthenticated, function(req, res, next)
 });
 
 /* GET users listing. */
-router.get('/:user_id', tokenizer.ensureAuthenticated, function(req, res, next) {
+router.get('/:user_id', authMiddleware.ensureAuthenticated, function(req, res, next) {
 	var user_id = req.params.user_id;
 	if (user_id == "me")
 		user_id = req.user;
@@ -83,7 +81,7 @@ router.get('/:user_id', tokenizer.ensureAuthenticated, function(req, res, next) 
 });
 
 /* GET users listing. */
-router.get('/', tokenizer.ensureAuthenticated, function(req, res, next) {
+router.get('/', authMiddleware.ensureAuthenticated, function(req, res, next) {
 	let query = {};
 	if (!req.is_admin)
 		query = {
@@ -107,7 +105,7 @@ router.get('/', tokenizer.ensureAuthenticated, function(req, res, next) {
 	});
 });
 
-router.post('/', function(req, res, next) {
+router.post('/', authMiddleware.ensureAuthenticated, function(req, res, next) {
 	if (!req.is_admin) {
 		return res
 	      .status(403)

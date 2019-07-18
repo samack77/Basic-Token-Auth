@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-var crypto = require('crypto'); 
+var tokenizer = require('../services/tokenizer');
 
 const Schema = mongoose.Schema;
 
@@ -16,15 +16,10 @@ let UserSchema = new Schema({
 // then it hashes the salt with user password and creates a hash 
 // this hash is stored in the database as user password 
 
-UserSchema.methods.setPassword = function(password) { 
-     
- // creating a unique salt for a particular user 
-    this.salt = crypto.randomBytes(16).toString('hex'); 
-  
-    // hashing user's salt and password with 1000 iterations, 
-    // 64 length and sha512 digest 
-    this.hash = crypto.pbkdf2Sync(password, this.salt,  
-    1000, 64, `sha512`).toString(`hex`); 
+UserSchema.methods.setPassword = function(password) {
+    const saltAndHash = tokenizer.generateSaltAndHash(password);
+    this.salt = saltAndHash.salt;
+    this.hash = saltAndHash.hash;
 }; 
 
 // method to check entered password is correct or not 
