@@ -20,7 +20,7 @@ exports.generateSaltAndHash = function(password){
 
   // hashing user's salt and password with 1000 iterations, 
   // 64 length and sha512 digest 
-  res.hash = crypto.pbkdf2Sync(password, this.salt,  
+  res.hash = crypto.pbkdf2Sync(password, res.salt,  
   1000, 64, `sha512`).toString(`hex`); 
   return res;
 };

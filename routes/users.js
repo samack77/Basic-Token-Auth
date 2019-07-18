@@ -34,7 +34,7 @@ router.post('/:user_id', authMiddleware.ensureAuthenticated, function(req, res, 
     console.log("is_admin param: ", req.body.is_admin, typeof req.body.is_admin);
 
     if (req.body.password){
-    	const saltAndHash = tokenizer.generateSaltAndHash(password);
+    	const saltAndHash = tokenizer.generateSaltAndHash(req.body.password);
 		new_data.salt = saltAndHash.salt;
 	    new_data.hash = saltAndHash.hash;
 	}
