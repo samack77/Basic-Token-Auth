@@ -3,6 +3,7 @@ var jwt = require('jwt-simple');
 var env = require('../config/env');
 var crypto = require('crypto');
 var mongoose = require('mongoose');
+var moment = require('moment');
 
 exports.createToken = function(user) {
   var payload = {

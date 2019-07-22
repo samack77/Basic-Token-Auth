@@ -26,10 +26,13 @@ var s3 = new AWS.S3();
 
 // Models
 const User = require('./models/user');
+const Chance = require('./models/chance');
+const Quote = require('./models/quote');
 
 // Routers
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var quotesRouter = require('./routes/quotes');
 var authRouter = require('./routes/auth');
 
 var app = express();
@@ -73,6 +76,7 @@ app.use(multer({
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
 app.use('/users', usersRouter);
+app.use('/quotes', quotesRouter);
 
 // Iniciamos el servidor y la base de datos
 mongoose.connect('mongodb://localhost:27017/quotes', { useNewUrlParser: true });

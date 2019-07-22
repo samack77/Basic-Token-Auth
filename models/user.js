@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 var tokenizer = require('../services/tokenizer');
+var crypto = require('crypto');
 
 const Schema = mongoose.Schema;
 

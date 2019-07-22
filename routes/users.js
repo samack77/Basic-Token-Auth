@@ -72,7 +72,7 @@ router.get('/:user_id', authMiddleware.ensureAuthenticated, function(req, res, n
 			if (user)
 				return res
 					.status(200)
-					.send({email: user.email, name: user.name, is_admin: user.is_admin, message: "User found"});
+					.send({id: user._id, email: user.email, name: user.name, is_admin: user.is_admin, message: "User found"});
 			else
 				return res
 					.status(404)
@@ -128,8 +128,32 @@ router.post('/', authMiddleware.ensureAuthenticated, function(req, res, next) {
         else
             return res
     		    .status(200)
-        	    .send({message : "User created successfully"});
+        	    .send({message : "User created successfully", id: user._id});
     });
+});
+
+router.delete('/:user_id', authMiddleware.ensureAuthenticated, function(req, res, next) {
+	var user_id = req.params.user_id;
+	if (user_id == "me")
+		user_id = req.user;
+
+	if (user_id != req.user && !req.is_admin) {
+		return res
+	      .status(403)
+	      .send({message: "You do not have permissions to do this."});
+	}
+
+
+    User.deleteOne({_id: mongoose.Types.ObjectId(user_id)}, function (err) {
+    	if (err)
+            return res
+                .status(400)
+                .send({message : "Oops! Something is wrong.."}); 
+        else
+            return res
+    		    .status(200)
+        	    .send({message : "User deleted successfully"});
+	});
 });
 
 module.exports = router;
